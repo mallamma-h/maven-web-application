@@ -1,0 +1,37 @@
+pipeline{
+agent any
+tools{
+   maven 'maven3.8.1'
+}
+
+stages{
+		stage('Git clone'){
+				steps{
+				
+				git url:'https://github.com/mallamma-h/maven-web-application.git' ,branch:'development'
+					}
+		}
+		stage('build'){
+				steps{
+					sh 'mvn clean package'
+				}
+				}
+		stage('sonar report'){
+				steps{
+				sh 'mvn sonar:sonar'
+				
+				}
+		}
+	stage('deploy to tomcat'){
+							steps{
+						sshagent(['tomcatpemfile']) {
+			            sh "scp -o StrictHostKeyChecking=no  target/maven-web-application.war  ec2-user@65.0.199.7:/opt/apache-tomcat-9.0.50/webapps"
+
+						}
+									}
+								
+								
+								}
+
+}
+}
