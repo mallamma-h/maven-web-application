@@ -1,7 +1,7 @@
 pipeline{
 //agent any
 agent{
-label '125server'
+label '1211server'
 }
 triggers{
 pollSCM('* * * * *')
